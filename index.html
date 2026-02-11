@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Attendance & Gate Pass Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-edit {
+            background-color: #f59e0b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .btn-delete {
+            background-color: #ef4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .input-field {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 4px;
+        }
+        .badge-red {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .tab-active {
+            border-bottom: 2px solid #2563eb;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Campus Admin Portal</h1>
+            <p class="text-gray-500">Attendance & Gate Pass Management</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex space-x-4 mb-6 border-b border-gray-200">
+            <button onclick="switchTab('tardy')" id="tab-tardy" class="pb-2 px-4 font-medium tab-active">Tardy Slips</button>
+            <button onclick="switchTab('gatepass')" id="tab-gatepass" class="pb-2 px-4 font-medium text-gray-500">Gate Passes</button>
+            <button onclick="switchTab('records')" id="tab-records" class="pb-2 px-4 font-medium text-gray-500">View Records</button>
+        </div>
+
+        <!-- Tardy Slip Section -->
+        <div id="section-tardy" class="tab-content">
+            <div class="card">
+                <h2 id="tardyFormTitle" class="text-xl font-bold mb-4 text-blue-700">Issue Tardy Slip</h2>
+                <form id="tardyForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="editTardyId">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Student Name</label>
+                        <input type="text" id="tardyStudent" required class="input-field" placeholder="Full Name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Current Date & Time</label>
+                        <input type="datetime-local" id="tardyDateTime" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Class Start Time</label>
+                        <input type="time" id="classTime" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Grade Level</label>
+                        <select id="tardyGrade" required class="input-field">
+                            <option value="">Select Grade</option>
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                            <option value="10">Grade 10</option>
+                            <option value="11">Grade 11</option>
+                            <option value="12">Grade 12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Section</label>
+                        <input type="text" id="tardySection" required class="input-field" placeholder="e.g. Diamond">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Reason for Tardiness</label>
+                        <textarea id="tardyReason" required class="input-field" rows="2"></textarea>
+                    </div>
+                    <div class="md:col-span-2 flex justify-end gap-2">
+                        <button type="button" id="cancelTardyEdit" class="hidden px-4 py-2 text-gray-600 font-medium" onclick="resetTardyForm()">Cancel Edit</button>
+                        <button type="submit" id="tardySubmitBtn" class="btn-primary">Generate Tardy Slip</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Gate Pass Section -->
+        <div id="section-gatepass" class="tab-content hidden">
+            <div class="card">
+                <h2 id="gpFormTitle" class="text-xl font-bold mb-4 text-green-700">Gate Pass (Early Dismissal)</h2>
+                <form id="gatePassForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="editGpId">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Student Name</label>
+                        <input type="text" id="gpStudent" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Date</label>
+                        <input type="date" id="gpDate" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Grade & Section</label>
+                        <input type="text" id="gpGradeSection" required class="input-field" placeholder="e.g. 10 - Emerald">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Time of Exit</label>
+                        <input type="time" id="gpTimeExit" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Picked up by</label>
+                        <input type="text" id="gpPicker" required class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Relationship</label>
+                        <input type="text" id="gpRelationship" required class="input-field" placeholder="e.g. Parent, Guardian">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Contact Number</label>
+                        <input type="tel" id="gpContact" required class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700">Reason for Leaving</label>
+                        <textarea id="gpReason" required class="input-field" rows="2"></textarea>
+                    </div>
+                    <div class="md:col-span-2 flex justify-end gap-2">
+                        <button type="button" id="cancelGpEdit" class="hidden px-4 py-2 text-gray-600 font-medium" onclick="resetGpForm()">Cancel Edit</button>
+                        <button type="submit" id="gpSubmitBtn" class="btn-primary" style="background-color: #059669;">Issue Gate Pass</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Records Section -->
+        <div id="section-records" class="tab-content hidden">
+            <div class="grid grid-cols-1 gap-6">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4">Student Tardy Registry</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="p-3 border-b">Student</th>
+                                    <th class="p-3 border-b">Date/Time</th>
+                                    <th class="p-3 border-b">Class Time</th>
+                                    <th class="p-3 border-b">Grade/Sec</th>
+                                    <th class="p-3 border-b">Status</th>
+                                    <th class="p-3 border-b text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tardyTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4">Gate Pass History</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="p-3 border-b">Student</th>
+                                    <th class="p-3 border-b">Exit Time</th>
+                                    <th class="p-3 border-b">Picked By</th>
+                                    <th class="p-3 border-b">Reason</th>
+                                    <th class="p-3 border-b text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gpTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirmBox" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 class="text-lg font-bold mb-2">Are you sure?</h3>
+            <p id="confirmText" class="text-gray-600 mb-6"></p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeConfirm()" class="px-4 py-2 text-gray-600">Cancel</button>
+                <button id="confirmBtn" class="px-4 py-2 bg-red-500 text-white rounded-lg">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="messageBox" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center">
+            <div id="messageIcon" class="mb-4 text-4xl"></div>
+            <h3 id="messageTitle" class="text-lg font-bold mb-2"></h3>
+            <p id="messageText" class="text-gray-600 mb-6"></p>
+            <button onclick="closeMessage()" class="btn-primary w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let tardyRecords = JSON.parse(localStorage.getItem('tardyRecords')) || [];
+        let gatePassRecords = JSON.parse(localStorage.getItem('gatePassRecords')) || [];
+        let deleteCallback = null;
+
+        // Tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById(`section-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.add('tab-active');
+            activeBtn.classList.remove('text-gray-500');
+            if (tabName === 'records') renderRecords();
+        }
+
+        // Tardy Operations
+        document.getElementById('tardyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editTardyId').value;
+            
+            const recordData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                student: document.getElementById('tardyStudent').value,
+                dateTime: document.getElementById('tardyDateTime').value,
+                classTime: document.getElementById('classTime').value,
+                grade: document.getElementById('tardyGrade').value,
+                section: document.getElementById('tardySection').value,
+                reason: document.getElementById('tardyReason').value
+            };
+
+            if (editId) {
+                const idx = tardyRecords.findIndex(r => r.id === parseInt(editId));
+                tardyRecords[idx] = recordData;
+                showMessage("Updated", "Record updated successfully", "✏️");
+            } else {
+                tardyRecords.push(recordData);
+                const count = tardyRecords.filter(r => r.student.toLowerCase() === recordData.student.toLowerCase()).length;
+                let msg = `Tardy slip generated for ${recordData.student}.`;
+                if (count % 3 === 0) msg += ` \n\n⚠️ 3rd occurrence reached! 1 Absence triggered.`;
+                showMessage("Success", msg, "📌");
+            }
+
+            localStorage.setItem('tardyRecords', JSON.stringify(tardyRecords));
+            resetTardyForm();
+        });
+
+        function editTardy(id) {
+            const record = tardyRecords.find(r => r.id === id);
+            if (!record) return;
+            
+            document.getElementById('editTardyId').value = record.id;
+            document.getElementById('tardyStudent').value = record.student;
+            document.getElementById('tardyDateTime').value = record.dateTime;
+            document.getElementById('classTime').value = record.classTime;
+            document.getElementById('tardyGrade').value = record.grade;
+            document.getElementById('tardySection').value = record.section;
+            document.getElementById('tardyReason').value = record.reason;
+            
+            document.getElementById('tardyFormTitle').innerText = "Edit Tardy Slip";
+            document.getElementById('tardySubmitBtn').innerText = "Update Record";
+            document.getElementById('cancelTardyEdit').classList.remove('hidden');
+            switchTab('tardy');
+        }
+
+        function resetTardyForm() {
+            document.getElementById('tardyForm').reset();
+            document.getElementById('editTardyId').value = "";
+            document.getElementById('tardyFormTitle').innerText = "Issue Tardy Slip";
+            document.getElementById('tardySubmitBtn').innerText = "Generate Tardy Slip";
+            document.getElementById('cancelTardyEdit').classList.add('hidden');
+            setDefaultDates();
+        }
+
+        function deleteTardy(id) {
+            showConfirm("Delete this tardy record permanently?", () => {
+                tardyRecords = tardyRecords.filter(r => r.id !== id);
+                localStorage.setItem('tardyRecords', JSON.stringify(tardyRecords));
+                renderRecords();
+                closeConfirm();
+            });
+        }
+
+        // Gate Pass Operations
+        document.getElementById('gatePassForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editGpId').value;
+            
+            const gpData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                student: document.getElementById('gpStudent').value,
+                date: document.getElementById('gpDate').value,
+                gradeSection: document.getElementById('gpGradeSection').value,
+                timeExit: document.getElementById('gpTimeExit').value,
+                reason: document.getElementById('gpReason').value,
+                picker: document.getElementById('gpPicker').value,
+                relationship: document.getElementById('gpRelationship').value,
+                contact: document.getElementById('gpContact').value
+            };
+
+            if (editId) {
+                const idx = gatePassRecords.findIndex(r => r.id === parseInt(editId));
+                gatePassRecords[idx] = gpData;
+                showMessage("Updated", "Gate Pass updated successfully", "✏️");
+            } else {
+                gatePassRecords.push(gpData);
+                showMessage("Issued", "Gate Pass has been issued", "🚗");
+            }
+
+            localStorage.setItem('gatePassRecords', JSON.stringify(gatePassRecords));
+            resetGpForm();
+        });
+
+        function editGp(id) {
+            const record = gatePassRecords.find(r => r.id === id);
+            if (!record) return;
+
+            document.getElementById('editGpId').value = record.id;
+            document.getElementById('gpStudent').value = record.student;
+            document.getElementById('gpDate').value = record.date;
+            document.getElementById('gpGradeSection').value = record.gradeSection;
+            document.getElementById('gpTimeExit').value = record.timeExit;
+            document.getElementById('gpPicker').value = record.picker;
+            document.getElementById('gpRelationship').value = record.relationship;
+            document.getElementById('gpContact').value = record.contact;
+            document.getElementById('gpReason').value = record.reason;
+
+            document.getElementById('gpFormTitle').innerText = "Edit Gate Pass";
+            document.getElementById('gpSubmitBtn').innerText = "Update Gate Pass";
+            document.getElementById('cancelGpEdit').classList.remove('hidden');
+            switchTab('gatepass');
+        }
+
+        function resetGpForm() {
+            document.getElementById('gatePassForm').reset();
+            document.getElementById('editGpId').value = "";
+            document.getElementById('gpFormTitle').innerText = "Gate Pass (Early Dismissal)";
+            document.getElementById('gpSubmitBtn').innerText = "Issue Gate Pass";
+            document.getElementById('cancelGpEdit').classList.add('hidden');
+            setDefaultDates();
+        }
+
+        function deleteGp(id) {
+            showConfirm("Delete this gate pass record?", () => {
+                gatePassRecords = gatePassRecords.filter(r => r.id !== id);
+                localStorage.setItem('gatePassRecords', JSON.stringify(gatePassRecords));
+                renderRecords();
+                closeConfirm();
+            });
+        }
+
+        // UI Rendering
+        function renderRecords() {
+            const tBody = document.getElementById('tardyTableBody');
+            tBody.innerHTML = '';
+            const counts = {};
+            tardyRecords.forEach(r => counts[r.student.toLowerCase()] = (counts[r.student.toLowerCase()] || 0) + 1);
+
+            tardyRecords.slice().reverse().forEach(r => {
+                const lateCount = counts[r.student.toLowerCase()];
+                const isAbsence = lateCount >= 3 ? `<span class="badge-red">Absence (${Math.floor(lateCount/3)})</span>` : 'Normal';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 border-b font-medium">${r.student}</td>
+                    <td class="p-3 border-b text-gray-600">${new Date(r.dateTime).toLocaleString()}</td>
+                    <td class="p-3 border-b text-gray-600">${r.classTime}</td>
+                    <td class="p-3 border-b text-gray-600">G${r.grade} - ${r.section}</td>
+                    <td class="p-3 border-b">${isAbsence}</td>
+                    <td class="p-3 border-b text-center whitespace-nowrap">
+                        <button onclick="editTardy(${r.id})" class="btn-edit mr-1">Edit</button>
+                        <button onclick="deleteTardy(${r.id})" class="btn-delete">Del</button>
+                    </td>
+                `;
+                tBody.appendChild(tr);
+            });
+
+            const gpBody = document.getElementById('gpTableBody');
+            gpBody.innerHTML = '';
+            gatePassRecords.slice().reverse().forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 border-b">
+                        <div class="font-medium">${r.student}</div>
+                        <div class="text-xs text-gray-500">${r.gradeSection}</div>
+                    </td>
+                    <td class="p-3 border-b text-gray-600">${r.date} @ ${r.timeExit}</td>
+                    <td class="p-3 border-b text-sm">
+                        ${r.picker} (${r.relationship})
+                    </td>
+                    <td class="p-3 border-b text-gray-600 italic">${r.reason}</td>
+                    <td class="p-3 border-b text-center whitespace-nowrap">
+                        <button onclick="editGp(${r.id})" class="btn-edit mr-1">Edit</button>
+                        <button onclick="deleteGp(${r.id})" class="btn-delete">Del</button>
+                    </td>
+                `;
+                gpBody.appendChild(tr);
+            });
+        }
+
+        // Modals
+        function showConfirm(text, callback) {
+            document.getElementById('confirmText').innerText = text;
+            document.getElementById('confirmBox').classList.remove('hidden');
+            deleteCallback = callback;
+            document.getElementById('confirmBtn').onclick = deleteCallback;
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirmBox').classList.add('hidden');
+        }
+
+        function showMessage(title, text, icon) {
+            document.getElementById('messageTitle').innerText = title;
+            document.getElementById('messageText').innerText = text;
+            document.getElementById('messageIcon').innerText = icon;
+            document.getElementById('messageBox').classList.remove('hidden');
+        }
+
+        function closeMessage() {
+            document.getElementById('messageBox').classList.add('hidden');
+        }
+
+        function setDefaultDates() {
+            const now = new Date();
+            const localIso = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            const localDate = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 10);
+            if(document.getElementById('tardyDateTime')) document.getElementById('tardyDateTime').value = localIso;
+            if(document.getElementById('gpDate')) document.getElementById('gpDate').value = localDate;
+        }
+
+        window.onload = setDefaultDates;
+    </script>
+</body>
+</html>
