@@ -74,7 +74,7 @@ function editTardy(id) {
   if (!record) return;
 
   document.getElementById("editTardyId").value = record.id;
-  document.getElementById("tardyStudent").value = record.student;
+  document.getElementById("tardyStudent").value = record.student;   
   document.getElementById("tardyDateTime").value = record.dateTime;
   document.getElementById("classTime").value = record.classTime;
   document.getElementById("tardyGrade").value = record.grade;
@@ -197,7 +197,7 @@ function renderRecords() {
                     <td class="p-4 text-gray-600">G${r.grade} - ${r.section}</td>
                     <td class="p-4">${isAbsence}</td>
                     <td class="p-4 text-center whitespace-nowrap">
-                        <button onclick="editTardy(${r.id})" class="btn-edit mr-2">EDIT</button>
+                        <button onclick="window.location.href='index.html?editTardy=${r.id}'" class="btn-edit mr-2">EDIT</button>
                         <button onclick="deleteRecord('tardy', ${r.id})" class="btn-delete">DEL</button>
                     </td>
                 `;
@@ -213,22 +213,20 @@ function renderRecords() {
       const tr = document.createElement("tr");
       tr.className = "border-b border-gray-100 hover:bg-slate-50";
       tr.innerHTML = `
-                    <td class="p-4">
-                        <div class="font-bold text-gray-800">${r.student}</div>
-                        <div class="text-xs font-bold text-gray-400 uppercase">${r.gradeSection}</div>
-                    </td>
-                    <td class="p-4 text-gray-600">${r.date} @ ${r.timeExit}</td>
-                    <td class="p-4 text-xs font-bold uppercase">
-                        ${r.picker} <br><span class="text-blue-500">${r.relationship}</span>
-                    </td>
+                    <td class="p-4 font-bold text-gray-800">${r.student}</td>
+                    <td class="p-4 text-gray-600">${r.gradeSection}</td>
+                    <td class="p-4 text-gray-600">${r.picker}</td>
+                    <td class="p-4 text-gray-600">${r.contact}</td>
+                    <td class="p-4 text-gray-600">${r.date}</td>
+                    <td class="p-4 text-gray-600">${r.timeExit}</td>
+                    <td class="p-4 text-gray-600">${r.relationship}</td>
                     <td class="p-4 text-gray-600 italic text-xs">${r.reason}</td>
                     <td class="p-4 text-center whitespace-nowrap">
-                        <button onclick="editGp(${r.id})" class="btn-edit mr-2">EDIT</button>
-                        <button onclick="deleteRecord('gatepass', ${r.id})" class="btn-delete">
-                            DEL
-                        </button>
+                        <button onclick="window.location.href='index.html?editGp=${r.id}'" class="btn-edit mr-2">EDIT</button>
+                        <button onclick="deleteRecord('gatepass', ${r.id})" class="btn-delete">DEL</button>
                     </td>
-                `;
+`;
+
       gpBody.appendChild(tr);
     });
 }
@@ -310,3 +308,53 @@ function deleteRecord(type, id) {
         });
     }
 }
+
+function editRecord(type, id, newData) {
+    id = Number(id);
+
+    if (type === "tardy") {
+        showConfirm("Save changes to this Tardy record?", () => {
+            tardyRecords = tardyRecords.map((r) => {
+                if (r.id === id) {
+                    return { ...r, ...newData }; // update fields from user input
+                }
+                return r;
+            });
+
+            localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
+            renderRecords();
+            closeConfirm();
+        });
+    }
+    else if (type === "gatepass") {
+        showConfirm("Save changes to this Gate Pass record?", () => {
+            gatePassRecords = gatePassRecords.map((r) => {
+                if (r.id === id) {
+                    return { ...r, ...newData };
+                }
+                return r;
+            });
+
+            localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+            renderRecords();
+            closeConfirm();
+        });
+    }
+}
+window.addEventListener("DOMContentLoaded", () => {
+
+  const params = new URLSearchParams(window.location.search);
+
+  const tardyId = params.get("editTardy");
+  const gpId = params.get("editGp");
+
+  if (tardyId) {
+    editTardy(Number(tardyId));
+  }
+
+  if (gpId) {
+    editGp(Number(gpId));
+  }
+
+});
+
