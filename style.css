@@ -1,0 +1,158 @@
+/* Modern Boxy Design System */
+:root {
+  --brand-blue: #2563eb;
+  --brand-green: #059669;
+}
+
+body {
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  background-attachment: fixed;
+  min-height: 100vh;  
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Removing rounded corners for "Boxy" look */
+.card,
+.input-field,
+.btn-primary,
+.btn-edit,
+.btn-delete,
+.badge-red,
+select,
+textarea,
+button,
+.modal-content {
+  border-radius: 0px !important;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  background-color: var(--brand-blue);
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.btn-primary:hover {
+  background-color: white;
+  color: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+.input-field {
+  width: 100%;
+  border: 2px solid #cbd5e1;
+  padding: 10px 12px;
+  margin-top: 4px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--brand-blue);
+}
+
+/* Tab Animation Logic */
+.tabs-container {
+  position: relative;
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-btn {
+  position: relative;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: #64748b;
+  transition: color 0.3s;
+  z-index: 1;
+}
+
+.tab-btn.active {
+  color: var(--brand-blue);
+}
+
+/* The Moving Underline Indicator */
+#tab-indicator {
+  position: absolute;
+  bottom: -2px;
+  height: 2px;
+  background-color: var(--brand-blue);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
+.btn-edit {
+  background-color: #f59e0b;
+  color: white;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+}
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+}
+
+.badge-red {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 2px 10px;
+  border: 1px solid #fecaca;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.logo-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  border: 3px solid var(--brand-blue);
+}
+
+.section-fade {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.school-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border: 3px solid #2563eb;
+  padding: 4px;
+  background: white;
+  margin: 0 auto 1.5rem;
+  display: block;
+}
