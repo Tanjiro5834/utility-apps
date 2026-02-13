@@ -14,6 +14,23 @@ body {
     -apple-system,
     sans-serif;
 }
+/* Apply Bebas Neue to all Headers and Nav elements */
+h1, h2, h3, .tab-btn, .btn-primary, th {
+    font-family: 'Bebas Neue', sans-serif !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Specific sizing for the Main Title */
+h1 {
+    font-size: 3rem !important;
+    line-height: 1;
+}
+
+/* Specific sizing for Section Titles */
+h2 {
+    font-size: 1.75rem !important;
+}
 
 /* Removing rounded corners for "Boxy" look */
 .card,
@@ -31,14 +48,19 @@ button,
 
 .card {
   background: white;
-  border: 1px solid #e2e8f0;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid #FFD700; /* School Yellow accent on the top edge */
+  box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.3), 
+        0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   padding: 24px;
   margin-bottom: 24px;
 }
 
 .btn-primary {
   background-color: var(--brand-blue);
+  font-size: 1.2rem !important;
   color: white;
   padding: 10px 20px;
   font-weight: 600;
@@ -76,6 +98,7 @@ button,
 
 .tab-btn {
   position: relative;
+  font-size: 1.2rem !important;
   padding: 12px 24px;
   font-weight: 600;
   color: #64748b;
