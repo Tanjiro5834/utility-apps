@@ -34,37 +34,40 @@ function switchTab(tabName, btnElement) {
 }
 
 // Tardy Operations
-document.getElementById("tardyForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const editId = document.getElementById("editTardyId").value;
+const tardyForm = document.getElementById("tardyForm");
+if(tardyForm){
+    tardyForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const editId = document.getElementById("editTardyId").value;
 
-  const recordData = {
-    id: editId ? parseInt(editId) : Date.now(),
-    student: document.getElementById("tardyStudent").value,
-    dateTime: document.getElementById("tardyDateTime").value,
-    classTime: document.getElementById("classTime").value,
-    grade: document.getElementById("tardyGrade").value,
-    section: document.getElementById("tardySection").value,
-    reason: document.getElementById("tardyReason").value,
-  };
+        const recordData = {
+            id: editId ? parseInt(editId) : Date.now(),
+            student: document.getElementById("tardyStudent").value,
+            dateTime: document.getElementById("tardyDateTime").value,
+            classTime: document.getElementById("classTime").value,
+            grade: document.getElementById("tardyGrade").value,
+            section: document.getElementById("tardySection").value,
+            reason: document.getElementById("tardyReason").value,
+        };
 
-  if (editId) {
-    const idx = tardyRecords.findIndex((r) => r.id === parseInt(editId));
-    tardyRecords[idx] = recordData;
-    showMessage("UPDATED", "Record modified in registry", "✏️");
-  } else {
-    tardyRecords.push(recordData);
-    const count = tardyRecords.filter(
-      (r) => r.student.toLowerCase() === recordData.student.toLowerCase(),
-    ).length;
-    let msg = `Tardy slip generated for ${recordData.student}.`;
-    if (count % 3 === 0) msg += ` \n\n⚠️ 3RD OCCURRENCE! 1 Absence triggered.`;
-    showMessage("SUCCESS", msg, "📌");
-  }
+        if (editId) {
+            const idx = tardyRecords.findIndex((r) => r.id === parseInt(editId));
+            tardyRecords[idx] = recordData;
+            showMessage("UPDATED", "Record modified in registry", "✏️");
+        } else {
+            tardyRecords.push(recordData);
+            const count = tardyRecords.filter(
+            (r) => r.student.toLowerCase() === recordData.student.toLowerCase(),
+            ).length;
+            let msg = `Tardy slip generated for ${recordData.student}.`;
+            if (count % 3 === 0) msg += ` \n\n⚠️ 3RD OCCURRENCE! 1 Absence triggered.`;
+            showMessage("SUCCESS", msg, "📌");
+        }
 
-  localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
-  resetTardyForm();
-});
+        localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
+        resetTardyForm();
+    });
+}
 
 function editTardy(id) {
   const record = tardyRecords.find((r) => r.id === id);
@@ -93,45 +96,38 @@ function resetTardyForm() {
   setDefaultDates();
 }
 
-function deleteTardy(id) {
-  showConfirm("Confirm permanent deletion of this record?", () => {
-    tardyRecords = tardyRecords.filter((r) => r.id !== id);
-    localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
-    renderRecords();
-    closeConfirm();
-  });
-}
-
 // Gate Pass Operations
-document.getElementById("gatePassForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const editId = document.getElementById("editGpId").value;
+const gatePassForm = document.getElementById("gatePassForm");
+if(gatePassForm){
+    gatePassForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const editId = document.getElementById("editGpId").value;
 
-  const gpData = {
-    id: editId ? parseInt(editId) : Date.now(),
-    student: document.getElementById("gpStudent").value,
-    date: document.getElementById("gpDate").value,
-    gradeSection: document.getElementById("gpGradeSection").value,
-    timeExit: document.getElementById("gpTimeExit").value,
-    reason: document.getElementById("gpReason").value,
-    picker: document.getElementById("gpPicker").value,
-    relationship: document.getElementById("gpRelationship").value,
-    contact: document.getElementById("gpContact").value,
-  };
+        const gpData = {
+            id: editId ? parseInt(editId) : Date.now(),
+            student: document.getElementById("gpStudent").value,
+            date: document.getElementById("gpDate").value,
+            gradeSection: document.getElementById("gpGradeSection").value,
+            timeExit: document.getElementById("gpTimeExit").value,
+            reason: document.getElementById("gpReason").value,
+            picker: document.getElementById("gpPicker").value,
+            relationship: document.getElementById("gpRelationship").value,
+            contact: document.getElementById("gpContact").value,
+        };
 
-  if (editId) {
-    const idx = gatePassRecords.findIndex((r) => r.id === parseInt(editId));
-    gatePassRecords[idx] = gpData;
-    showMessage("UPDATED", "Gate Pass details modified", "✏️");
-  } else {
-    gatePassRecords.push(gpData);
-    showMessage("ISSUED", "Early Dismissal Authorized", "🚗");
-  }
+        if (editId) {
+            const idx = gatePassRecords.findIndex((r) => r.id === parseInt(editId));
+            gatePassRecords[idx] = gpData;
+            showMessage("UPDATED", "Gate Pass details modified", "✏️");
+        } else {
+            gatePassRecords.push(gpData);
+            showMessage("ISSUED", "Early Dismissal Authorized", "🚗");
+        }
 
-  localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
-  resetGpForm();
-});
-
+        localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+        resetGpForm();
+    });
+}
 function editGp(id) {
   const record = gatePassRecords.find((r) => r.id === id);
   if (!record) return;
@@ -202,7 +198,7 @@ function renderRecords() {
                     <td class="p-4">${isAbsence}</td>
                     <td class="p-4 text-center whitespace-nowrap">
                         <button onclick="editTardy(${r.id})" class="btn-edit mr-2">EDIT</button>
-                        <button onclick="deleteTardy(${r.id})" class="btn-delete">DEL</button>
+                        <button onclick="deleteRecord('tardy', ${r.id})" class="btn-delete">DEL</button>
                     </td>
                 `;
       tBody.appendChild(tr);
@@ -228,7 +224,9 @@ function renderRecords() {
                     <td class="p-4 text-gray-600 italic text-xs">${r.reason}</td>
                     <td class="p-4 text-center whitespace-nowrap">
                         <button onclick="editGp(${r.id})" class="btn-edit mr-2">EDIT</button>
-                        <button onclick="deleteGp(${r.id})" class="btn-delete">DEL</button>
+                        <button onclick="deleteRecord('gatepass', ${r.id})" class="btn-delete">
+                            DEL
+                        </button>
                     </td>
                 `;
       gpBody.appendChild(tr);
@@ -272,13 +270,43 @@ function setDefaultDates() {
     document.getElementById("gpDate").value = localDate;
 }
 
-window.onload = () => {
-  setDefaultDates();
-  updateTabIndicator(document.getElementById("tab-tardy-btn"));
-};
+window.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("tardyDateTime")) {
+    setDefaultDates();
+  }
+
+  const tabBtn = document.getElementById("tab-tardy-btn");
+  if (tabBtn) {
+    updateTabIndicator(tabBtn);
+  }
+
+  if (document.getElementById("tardyTableBody")) {
+    renderRecords();
+  }
+});
+
 
 // Resize observer for tab indicator responsiveness
 window.addEventListener("resize", () => {
   const activeTab = document.querySelector(".tab-btn.active");
   if (activeTab) updateTabIndicator(activeTab);
 });
+
+function deleteRecord(type, id) {
+    id = Number(id); 
+    if (type === "tardy") {
+        showConfirm("Confirm permanent deletion of this record?", () => {
+            tardyRecords = tardyRecords.filter((r) => r.id !== id);
+            localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
+            renderRecords();
+            closeConfirm();
+        });
+    }else if(type === "gatepass") {
+        showConfirm("Discard this Gate Pass record?", () => {
+            gatePassRecords = gatePassRecords.filter((r) => r.id !== id);
+            localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+            renderRecords();
+            closeConfirm();
+        });
+    }
+}
