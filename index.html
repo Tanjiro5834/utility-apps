@@ -17,13 +17,19 @@
             </h1>
             <div class="h-1 w-24 bg-blue-600 mx-auto mt-2 mb-4"></div>
             <p class="text-gray-500 font-medium tracking-widest uppercase text-sm">Administrator Portal</p>
+
+            <div class="mt-4">
+                <a href="records.html" class="btn-primary inline-block">
+                    View Records →
+                </a>
+            </div>
+
         </header>
 
         
         <div class="tabs-container mb-8">
             <button onclick="switchTab('tardy', this)" id="tab-tardy-btn" class="tab-btn active">TARDY SLIPS</button>
             <button onclick="switchTab('gatepass', this)" id="tab-gatepass-btn" class="tab-btn">GATE PASSES</button>
-            <button onclick="switchTab('records', this)" id="tab-records-btn" class="tab-btn">VIEW RECORDS</button>
             <div id="tab-indicator"></div>
         </div>
 
@@ -116,48 +122,6 @@
                         <button type="submit" id="gpSubmitBtn" class="btn-primary" style="background-color: var(--brand-green);">Issue Pass</button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        
-        <div id="section-records" class="tab-content hidden section-fade">
-            <div class="grid grid-cols-1 gap-8">
-                <div class="card">
-                    <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Tardy Registry</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border-collapse">
-                            <thead>
-                                <tr class="bg-gray-100 border-b-2 border-gray-200">
-                                    <th class="p-4 uppercase text-xs font-bold">Student</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Date/Time</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Class</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Grade/Sec</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Status</th>
-                                    <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tardyTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Gate Pass History</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border-collapse">
-                            <thead>
-                                <tr class="bg-gray-100 border-b-2 border-gray-200">
-                                    <th class="p-4 uppercase text-xs font-bold">Student</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Exit Time</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Guardian</th>
-                                    <th class="p-4 uppercase text-xs font-bold">Reason</th>
-                                    <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gpTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

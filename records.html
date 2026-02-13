@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAIL - Records</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+
+        <header class="mb-10 text-center">
+            <h1 class="text-2xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">
+                Records Registry
+            </h1>
+            <div class="h-1 w-24 bg-blue-600 mx-auto mt-2 mb-4"></div>
+            <a href="index.html" class="btn-primary inline-block">
+                ← Back to Admin Portal
+            </a>
+        </header>
+
+        <div class="grid grid-cols-1 gap-8">
+            
+            <!-- Tardy Registry -->
+            <div class="card">
+                <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Tardy Registry</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b-2 border-gray-200">
+                                <th class="p-4 uppercase text-xs font-bold">Student</th>
+                                <th class="p-4 uppercase text-xs font-bold">Date/Time</th>
+                                <th class="p-4 uppercase text-xs font-bold">Class</th>
+                                <th class="p-4 uppercase text-xs font-bold">Grade/Sec</th>
+                                <th class="p-4 uppercase text-xs font-bold">Status</th>
+                                <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tardyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gate Pass History -->
+            <div class="card">
+                <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Gate Pass History</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b-2 border-gray-200">
+                                <th class="p-4 uppercase text-xs font-bold">Student</th>
+                                <th class="p-4 uppercase text-xs font-bold">Exit Time</th>
+                                <th class="p-4 uppercase text-xs font-bold">Guardian</th>
+                                <th class="p-4 uppercase text-xs font-bold">Reason</th>
+                                <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gpTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        window.onload = function () {
+            renderRecords();
+        };
+    </script>
+</body>
+</html>
