@@ -191,16 +191,16 @@ function renderRecords() {
       const tr = document.createElement("tr");
       tr.className = "border-b border-gray-100 hover:bg-slate-50";
       tr.innerHTML = `
-                    <td class="p-4 font-bold text-gray-800">${r.student}</td>
-                    <td class="p-4 text-gray-600">${new Date(r.dateTime).toLocaleString()}</td>
-                    <td class="p-4 text-gray-600 font-mono text-xs">${r.classTime}</td>
-                    <td class="p-4 text-gray-600">G${r.grade} - ${r.section}</td>
-                    <td class="p-4">${isAbsence}</td>
-                    <td class="p-4 text-center whitespace-nowrap">
-                        <button onclick="window.location.href='index.html?editTardy=${r.id}'" class="btn-edit mr-2">EDIT</button>
-                        <button onclick="deleteRecord('tardy', ${r.id})" class="btn-delete">DEL</button>
-                    </td>
-                `;
+    <td class="p-4 font-bold text-gray-800">${r.student}</td>
+    <td class="p-4 text-gray-600">${new Date(r.dateTime).toLocaleString()}</td>
+    <td class="p-4 text-gray-600 font-mono text-xs">${r.classTime}</td>
+    <td class="p-4 text-gray-600">G${r.grade} - ${r.section}</td>
+    <td class="p-4 text-gray-500 italic text-xs max-w-xs truncate">${r.reason}</td> <td class="p-4">${isAbsence}</td>
+    <td class="p-4 text-center whitespace-nowrap">
+        <button onclick="window.location.href='index.html?editTardy=${r.id}'" class="btn-edit mr-2">EDIT</button>
+        <button onclick="deleteRecord('tardy', ${r.id})" class="btn-delete">DEL</button>
+    </td>
+`;
       tBody.appendChild(tr);
     });
 
