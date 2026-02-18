@@ -358,3 +358,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
 });
 
+async function testSave() {
+    const testData = {
+        tardy: tardyRecords,
+        gatepass: gatePassRecords
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(testData)
+        });
+        
+        const result = await response.json();
+        console.log("Server Response:", result.message);
+        alert("Saved to Hard Drive!");
+    } catch (error) {
+        console.error("Connection Failed:", error);
+        alert("Is the server running? Check the console.");
+    }
+}

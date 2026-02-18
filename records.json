@@ -1,0 +1,32 @@
+{
+  "tardy": [
+    {
+      "id": 1771379794121,
+      "student": "Harry Potter",
+      "dateTime": "2026-02-20T09:52",
+      "classTime": "07:30",
+      "grade": "12",
+      "section": "Emerald",
+      "reason": "Feeling sick"
+    },
+    {
+      "id": 1771379841354,
+      "student": "Harry Potter",
+      "dateTime": "2026-02-20T09:56",
+      "classTime": "07:30",
+      "grade": "12",
+      "section": "Emerald",
+      "reason": "None"
+    },
+    {
+      "id": 1771379866435,
+      "student": "Harry Potter",
+      "dateTime": "2026-02-21T09:57",
+      "classTime": "07:30",
+      "grade": "12",
+      "section": "Emerald",
+      "reason": "None"
+    }
+  ],
+  "gatepass": []
+}
