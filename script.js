@@ -65,6 +65,7 @@ if(tardyForm){
         }
 
         localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
+        saveToDisk();
         resetTardyForm();
     });
 }
@@ -125,6 +126,7 @@ if(gatePassForm){
         }
 
         localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+        saveToDisk();
         resetGpForm();
     });
 }
@@ -304,6 +306,7 @@ function deleteRecord(type, id) {
             gatePassRecords = gatePassRecords.filter((r) => r.id !== id);
             localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
             renderRecords();
+            saveToDisk();
             closeConfirm();
         });
     }
@@ -379,3 +382,23 @@ async function testSave() {
         alert("Is the server running? Check the console.");
     }
 }
+
+const { ipcRenderer } = require('electron');
+
+// Call this to save
+function saveToDisk() {
+    const allData = { tardy: tardyRecords, gatepass: gatePassRecords };
+    ipcRenderer.send('save-data', allData);
+}
+
+// Call this to load when app starts
+ipcRenderer.send('load-data');
+ipcRenderer.on('loaded-data', (event, data) => {
+    tardyRecords = data.tardy || [];
+    gatePassRecords = data.gatepass || [];
+    renderRecords();
+});
+
+ipcRenderer.on('save-status', (event, message) => {
+    console.log(message);
+});
