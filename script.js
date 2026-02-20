@@ -45,6 +45,7 @@ if(tardyForm){
             student: document.getElementById("tardyStudent").value,
             dateTime: document.getElementById("tardyDateTime").value,
             classTime: document.getElementById("classTime").value,
+            arrivalTime: document.getElementById("arrivalTime").value,
             grade: document.getElementById("tardyGrade").value,
             section: document.getElementById("tardySection").value,
             reason: document.getElementById("tardyReason").value,
@@ -78,6 +79,7 @@ function editTardy(id) {
   document.getElementById("tardyStudent").value = record.student;   
   document.getElementById("tardyDateTime").value = record.dateTime;
   document.getElementById("classTime").value = record.classTime;
+  document.getElementById("arrivalTime").value = record.arrivalTime || "";
   document.getElementById("tardyGrade").value = record.grade;
   document.getElementById("tardySection").value = record.section;
   document.getElementById("tardyReason").value = record.reason;
@@ -196,6 +198,7 @@ function renderRecords() {
     <td class="p-4 font-bold text-gray-800">${r.student}</td>
     <td class="p-4 text-gray-600">${new Date(r.dateTime).toLocaleString()}</td>
     <td class="p-4 text-gray-600 font-mono text-xs">${r.classTime}</td>
+    <td class="p-4 text-gray-600 font-mono text-xs">${r.arrivalTime || '—'}</td>
     <td class="p-4 text-gray-600">G${r.grade} - ${r.section}</td>
     <td class="p-4 text-gray-500 italic text-xs max-w-xs truncate">${r.reason}</td> <td class="p-4">${isAbsence}</td>
     <td class="p-4 text-center whitespace-nowrap">
@@ -392,9 +395,12 @@ function saveToDisk() {
 }
 
 // Call this to load when app starts
-ipcRenderer.send('load-data');
 ipcRenderer.on('loaded-data', (event, data) => {
-    tardyRecords = data.tardy || [];
+    tardyRecords = (data.tardy || []).map(r => ({
+        arrivalTime: r.arrivalTime || "", // auto add if missing
+        ...r
+    }));
+
     gatePassRecords = data.gatepass || [];
     renderRecords();
 });
