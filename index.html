@@ -29,6 +29,7 @@
         <div class="tabs-container mb-8">
             <button onclick="switchTab('tardy', this)" id="tab-tardy-btn" class="tab-btn active">TARDY SLIPS</button>
             <button onclick="switchTab('gatepass', this)" id="tab-gatepass-btn" class="tab-btn">GATE PASSES</button>
+            <button onclick="switchTab('lostfound', this)" id="tab-lostfound-btn" class="tab-btn">LOST & FOUND</button>
             <div id="tab-indicator"></div>
         </div>
 
@@ -126,6 +127,103 @@
             </div>
         </div>
     </div>
+
+    <div id="section-lostfound" class="tab-content hidden section-fade">
+    <div class="card">
+        <h2 class="text-xl font-bold mb-6 text-red-700 border-l-4 border-red-700 pl-3">
+            Lost and Found Report
+        </h2>
+
+        <form id="lostFoundForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <input type="hidden" id="editLfId">
+
+            <!-- Reporter -->
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Reporter Name</label>
+                <input type="text" id="lfReporter" class="input-field" required>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Grade & Section</label>
+                <input type="text" id="lfGradeSection" class="input-field" required>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Date Reported</label>
+                <input type="date" id="lfDateReported" class="input-field" required>
+            </div>
+
+            <!-- Lost or Found -->
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-2">
+                    Item Type
+                </label>
+
+                <label class="mr-4">
+                    <input type="radio" name="lfType" value="lost" required> Lost Item
+                </label>
+
+                <label>
+                    <input type="radio" name="lfType" value="found"> Found Item
+                </label>
+            </div>
+
+            <!-- Item Details -->
+            <div>
+                 <label class="block text-xs font-bold uppercase text-gray-500">Item Name / Description</label>
+                 <input type="text" id="lfItemName" class="input-field" required>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Last Seen / Found Location</label>
+                <input type="text" id="lfLocation" class="input-field" required>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Color / Brand / Identifying Marks</label>
+                <input type="text" id="lfMarks" class="input-field" required>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Date & Time</label>
+                <input type="datetime-local" id="lfDateTime" class="input-field" required>
+            </div>
+
+            <!-- Action Taken -->
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Received By</label>
+                <input type="text" id="lfReceivedBy" class="input-field">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Date Received</label>
+                <input type="date" id="lfDateReceived" class="input-field">
+            </div>
+
+            <!-- Claim -->
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Claimant Name</label>
+                <input type="text" id="lfClaimant" class="input-field">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Relationship</label>
+                <input type="text" id="lfRelationship"class="input-field">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500">Date Claimed</label>
+                <input type="date" id="lfDateClaimed"class="input-field">
+            </div>
+
+            <div class="md:col-span-2 flex justify-end">
+                <button type="submit" class="btn-primary">Save Record</button>
+            </div>
+
+        </form>
+    </div>
+</div>
 
     <div id="messageBox" class="hidden fixed inset-0 bg-slate-900/60 flex items-center justify-center p-4 z-50">
         <div class="bg-white p-8 max-w-sm w-full text-center border-t-8 border-blue-600 shadow-2xl">

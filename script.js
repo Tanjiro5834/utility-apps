@@ -1,6 +1,7 @@
 // State
 let tardyRecords = JSON.parse(localStorage.getItem("tardyRecords")) || [];
 let gatePassRecords = JSON.parse(localStorage.getItem("gatePassRecords")) || [];
+let lostFoundRecords = JSON.parse(localStorage.getItem("lostFoundRecords")) || [];
 let deleteCallback = null;
 
 // Initialize Tab Indicator Position
@@ -132,6 +133,8 @@ if(gatePassForm){
         resetGpForm();
     });
 }
+
+
 function editGp(id) {
   const record = gatePassRecords.find((r) => r.id === id);
   if (!record) return;
@@ -152,6 +155,87 @@ function editGp(id) {
   switchTab("gatepass");
 }
 
+function editLostFound(id) {
+    const r = lostFoundRecords.find(x => x.id === id);
+    if (!r) return;
+
+    // 1. Switch to the tab first so the fields exist in the DOM
+    switchTab('lostfound', document.getElementById('tab-lostfound-btn'));
+
+    // 2. Fill the hidden ID field
+    document.getElementById("editLfId").value = r.id;
+    
+    // 3. Fill text inputs
+    document.getElementById("lfReporter").value = r.reporter || "";
+    document.getElementById("lfGradeSection").value = r.gradeSection || "";
+    document.getElementById("lfDateReported").value = r.dateReported || "";
+    document.getElementById("lfItemName").value = r.item || "";
+    document.getElementById("lfLocation").value = r.location || "";
+    document.getElementById("lfMarks").value = r.marks || "";
+    document.getElementById("lfDateTime").value = r.dateTime || "";
+    document.getElementById("lfReceivedBy").value = r.receivedBy || "";
+    document.getElementById("lfDateReceived").value = r.dateReceived || "";
+    document.getElementById("lfClaimant").value = r.claimant || "";
+    document.getElementById("lfRelationship").value = r.relationship || "";
+    document.getElementById("lfDateClaimed").value = r.dateClaimed || "";
+
+    // 4. Handle Radio Buttons
+    if (r.status) {
+        const radio = document.querySelector(`input[name="lfType"][value="${r.status.toLowerCase()}"]`);
+        if (radio) radio.checked = true;
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const lostFoundForm = document.getElementById("lostFoundForm");
+
+if (lostFoundForm) {
+    lostFoundForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const editId = document.getElementById("editLfId").value;
+
+        const type = document.querySelector('input[name="lfType"]:checked');
+        const status = type ? type.value.toUpperCase() : "";
+
+        const recordData = {
+    id: editId ? parseInt(editId) : Date.now(),
+    reporter: document.getElementById("lfReporter").value,
+    gradeSection: document.getElementById("lfGradeSection").value,
+    dateReported: document.getElementById("lfDateReported").value,
+    status,
+    item: document.getElementById("lfItemName").value, // Matches 'item' in your table
+    location: document.getElementById("lfLocation").value,
+    marks: document.getElementById("lfMarks").value,
+    dateTime: document.getElementById("lfDateTime").value,
+    receivedBy: document.getElementById("lfReceivedBy").value,
+    dateReceived: document.getElementById("lfDateReceived").value,
+    claimant: document.getElementById("lfClaimant").value, // Matches 'claimant' in your table
+    relationship: document.getElementById("lfRelationship").value,
+    dateClaimed: document.getElementById("lfDateClaimed").value
+};
+
+        if (!recordData.reporter || !recordData.gradeSection || !recordData.item || !status) {
+            showMessage("MISSING INFO", "Please complete required fields", "⚠️");
+            return;
+        }
+
+        if (editId) {
+            const idx = lostFoundRecords.findIndex(r => r.id === parseInt(editId));
+            lostFoundRecords[idx] = recordData;
+            showMessage("UPDATED", "Lost & Found record updated", "✏️");
+        } else {
+            lostFoundRecords.push(recordData);
+            showMessage("RECORDED", "Item logged successfully", "📦");
+        }
+
+        localStorage.setItem("lostFoundRecords", JSON.stringify(lostFoundRecords));
+        saveToDisk();
+        resetLostFoundForm();
+    });
+}
+
 function resetGpForm() {
   document.getElementById("gatePassForm").reset();
   document.getElementById("editGpId").value = "";
@@ -160,6 +244,11 @@ function resetGpForm() {
   document.getElementById("gpSubmitBtn").innerText = "Issue Pass";
   document.getElementById("cancelGpEdit").classList.add("hidden");
   setDefaultDates();
+}
+
+function resetLostFoundForm() {
+    document.getElementById("lostFoundForm").reset();
+    document.getElementById("editLfId").value = "";
 }
 
 function deleteGp(id) {
@@ -234,18 +323,73 @@ function renderRecords() {
 
       gpBody.appendChild(tr);
     });
+
+    
+const lfBody = document.getElementById("lfTableBody");
+if (!lfBody) return;
+
+lfBody.innerHTML = "";
+
+// Inside your renderRecords function for Lost & Found:
+lostFoundRecords.forEach(r => {
+    const row = `
+        <tr>
+            <td class="p-4">${r.reporter}</td>
+            <td class="p-4">${r.gradeSection}</td>
+            <td class="p-4">${r.dateReported}</td>
+            <td class="p-4">${r.status}</td>
+            <td class="p-4">${r.item || 'N/A'}</td> <td class="p-4">${r.location}</td>
+            <td class="p-4">${r.marks}</td>
+            <td class="p-4">${r.dateTime}</td>
+            <td class="p-4">${r.receivedBy || '---'}</td>
+            <td class="p-4">${r.dateReceived || '---'}</td>
+            <td class="p-4">${r.claimant || '---'}</td> <td class="p-4">${r.relationship || '---'}</td>
+            <td class="p-4">${r.dateClaimed || '---'}</td>
+            <td class="p-4 text-center">
+            <div class="flex gap-2 justify-center">
+                <button onclick="window.location.href='index.html?editLf=${r.id}'" class="btn-edit px-3 py-1 bg-yellow-500 text-white font-bold">EDIT</button>
+                <button onclick="deleteLostFound(${r.id})" class="btn-delete px-3 py-1 bg-red-600 text-white font-bold">DEL</button>
+            </div>
+        </td>
+        </tr>
+    `;
+    document.getElementById("lfTableBody").innerHTML += row;
+});
 }
 
-// Modals
+// Function to show the confirmation modal
 function showConfirm(text, callback) {
-  document.getElementById("confirmText").innerText = text;
-  document.getElementById("confirmBox").classList.remove("hidden");
-  deleteCallback = callback;
-  document.getElementById("confirmBtn").onclick = deleteCallback;
+    const confirmBox = document.getElementById("confirmBox");
+    const confirmText = document.getElementById("confirmText");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    confirmText.innerText = text;
+    confirmBox.classList.remove("hidden");
+    confirmBox.classList.add("flex"); // Ensure it shows up if using flex centering
+
+    // Set the callback for the confirm button
+    deleteCallback = () => {
+        callback();
+        closeConfirm();
+    };
+
+    confirmBtn.onclick = deleteCallback;
 }
 
+// Function to close the confirmation modal
 function closeConfirm() {
-  document.getElementById("confirmBox").classList.add("hidden");
+    const confirmBox = document.getElementById("confirmBox");
+    confirmBox.classList.add("hidden");
+    confirmBox.classList.remove("flex");
+}
+
+// The missing Delete function for Lost and Found
+function deleteLostFound(id) {
+    showConfirm("Are you sure you want to delete this Lost & Found record?", () => {
+        lostFoundRecords = lostFoundRecords.filter((r) => r.id !== id);
+        localStorage.setItem("lostFoundRecords", JSON.stringify(lostFoundRecords));
+        renderRecords(); // Refresh the table
+    });
 }
 
 function showMessage(title, text, icon) {
@@ -296,21 +440,34 @@ window.addEventListener("resize", () => {
 });
 
 function deleteRecord(type, id) {
-    id = Number(id); 
+    id = Number(id);
+
     if (type === "tardy") {
         showConfirm("Confirm permanent deletion of this record?", () => {
-            tardyRecords = tardyRecords.filter((r) => r.id !== id);
+            tardyRecords = tardyRecords.filter(r => r.id !== id);
             localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
             renderRecords();
             closeConfirm();
         });
-    }else if(type === "gatepass") {
-        showConfirm("Discard this Gate Pass record?", () => {
-            gatePassRecords = gatePassRecords.filter((r) => r.id !== id);
-            localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+    }
+
+    else if (type === "gatepass") {
+    showConfirm("Discard this Gate Pass record?", () => {
+        gatePassRecords = gatePassRecords.filter(r => r.id !== id);
+        localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+        renderRecords(); 
+        saveToDisk();    
+        closeConfirm();  
+    });
+}
+
+    else if (type === "lostfound") {   
+        showConfirm("Delete this Lost & Found record?", () => {
+            lostFoundRecords = lostFoundRecords.filter(r => r.id !== id);
+            localStorage.setItem("lostFoundRecords", JSON.stringify(lostFoundRecords));
             renderRecords();
             saveToDisk();
-            closeConfirm();
+            closeConfirm();   
         });
     }
 }
@@ -353,6 +510,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const tardyId = params.get("editTardy");
   const gpId = params.get("editGp");
+  const lfId = params.get("editLf");
 
   if (tardyId) {
     editTardy(Number(tardyId));
@@ -361,6 +519,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (gpId) {
     editGp(Number(gpId));
   }
+  if (lfId) {
+    editLostFound(Number(lfId));
+}
 
 });
 
@@ -390,8 +551,13 @@ const { ipcRenderer } = require('electron');
 
 // Call this to save
 function saveToDisk() {
-    const allData = { tardy: tardyRecords, gatepass: gatePassRecords };
-    ipcRenderer.send('save-data', allData);
+   const allData = {
+       tardy: tardyRecords,
+       gatepass: gatePassRecords,
+       lostfound: lostFoundRecords
+   };
+
+   ipcRenderer.send('save-data', allData);
 }
 
 // Call this to load when app starts
@@ -402,6 +568,7 @@ ipcRenderer.on('loaded-data', (event, data) => {
     }));
 
     gatePassRecords = data.gatepass || [];
+    lostFoundRecords = data.lostfound || [];
     renderRecords();
 });
 
