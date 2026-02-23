@@ -2,7 +2,7 @@
 let tardyRecords = JSON.parse(localStorage.getItem("tardyRecords")) || [];
 let gatePassRecords = JSON.parse(localStorage.getItem("gatePassRecords")) || [];
 let lostFoundRecords = JSON.parse(localStorage.getItem("lostFoundRecords")) || [];
-let deleteCallback = null;
+//let deleteCallback = null;
 
 // Initialize Tab Indicator Position
 function updateTabIndicator(btn) {
@@ -357,23 +357,37 @@ lostFoundRecords.forEach(r => {
 });
 }
 
-// Function to show the confirmation modal
+// // Function to show the confirmation modal
+// function showConfirm(text, callback) {
+//     const confirmBox = document.getElementById("confirmBox");
+//     const confirmText = document.getElementById("confirmText");
+//     const confirmBtn = document.getElementById("confirmBtn");
+
+//     confirmText.innerText = text;
+//     confirmBox.classList.remove("hidden");
+//     confirmBox.classList.add("flex"); // Ensure it shows up if using flex centering
+
+//     // Set the callback for the confirm button
+//     deleteCallback = () => {
+//         callback();
+//         closeConfirm();
+//     };
+
+//     confirmBtn.onclick = deleteCallback;
+// }
 function showConfirm(text, callback) {
     const confirmBox = document.getElementById("confirmBox");
     const confirmText = document.getElementById("confirmText");
     const confirmBtn = document.getElementById("confirmBtn");
 
     confirmText.innerText = text;
+
     confirmBox.classList.remove("hidden");
-    confirmBox.classList.add("flex"); // Ensure it shows up if using flex centering
 
-    // Set the callback for the confirm button
-    deleteCallback = () => {
-        callback();
-        closeConfirm();
+    confirmBtn.onclick = () => {
+        closeConfirm()
+        callback()
     };
-
-    confirmBtn.onclick = deleteCallback;
 }
 
 // Function to close the confirmation modal
@@ -381,6 +395,7 @@ function closeConfirm() {
     const confirmBox = document.getElementById("confirmBox");
     confirmBox.classList.add("hidden");
     confirmBox.classList.remove("flex");
+    
 }
 
 // The missing Delete function for Lost and Found
@@ -439,6 +454,38 @@ window.addEventListener("resize", () => {
   if (activeTab) updateTabIndicator(activeTab);
 });
 
+// function deleteRecord(type, id) {
+//     id = Number(id);
+
+//     if (type === "tardy") {
+//         showConfirm("Confirm permanent deletion of this record?", () => {
+//             tardyRecords = tardyRecords.filter(r => r.id !== id);
+//             localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
+//             renderRecords();
+//             closeConfirm();
+//         });
+//     }
+
+//     else if (type === "gatepass") {
+//     showConfirm("Discard this Gate Pass record?", () => {
+//         gatePassRecords = gatePassRecords.filter(r => r.id !== id);
+//         localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+//         renderRecords(); 
+//         saveToDisk();    
+//         closeConfirm();  
+//     });
+// }
+
+//     else if (type === "lostfound") {   
+//         showConfirm("Delete this Lost & Found record?", () => {
+//             lostFoundRecords = lostFoundRecords.filter(r => r.id !== id);
+//             localStorage.setItem("lostFoundRecords", JSON.stringify(lostFoundRecords));
+//             renderRecords();
+//             saveToDisk();
+//             closeConfirm();   
+//         });
+//     }
+// }
 function deleteRecord(type, id) {
     id = Number(id);
 
@@ -447,27 +494,24 @@ function deleteRecord(type, id) {
             tardyRecords = tardyRecords.filter(r => r.id !== id);
             localStorage.setItem("tardyRecords", JSON.stringify(tardyRecords));
             renderRecords();
-            closeConfirm();
         });
     }
 
     else if (type === "gatepass") {
-    showConfirm("Discard this Gate Pass record?", () => {
-        gatePassRecords = gatePassRecords.filter(r => r.id !== id);
-        localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
-        renderRecords(); 
-        saveToDisk();    
-        closeConfirm();  
-    });
-}
+        showConfirm("Discard this Gate Pass record?", () => {
+            gatePassRecords = gatePassRecords.filter(r => r.id !== id);
+            localStorage.setItem("gatePassRecords", JSON.stringify(gatePassRecords));
+            renderRecords();
+            saveToDisk();
+        });
+    }
 
-    else if (type === "lostfound") {   
+    else if (type === "lostfound") {
         showConfirm("Delete this Lost & Found record?", () => {
             lostFoundRecords = lostFoundRecords.filter(r => r.id !== id);
             localStorage.setItem("lostFoundRecords", JSON.stringify(lostFoundRecords));
             renderRecords();
             saveToDisk();
-            closeConfirm();   
         });
     }
 }
