@@ -357,45 +357,23 @@ lostFoundRecords.forEach(r => {
 });
 }
 
-// // Function to show the confirmation modal
-// function showConfirm(text, callback) {
-//     const confirmBox = document.getElementById("confirmBox");
-//     const confirmText = document.getElementById("confirmText");
-//     const confirmBtn = document.getElementById("confirmBtn");
-
-//     confirmText.innerText = text;
-//     confirmBox.classList.remove("hidden");
-//     confirmBox.classList.add("flex"); // Ensure it shows up if using flex centering
-
-//     // Set the callback for the confirm button
-//     deleteCallback = () => {
-//         callback();
-//         closeConfirm();
-//     };
-
-//     confirmBtn.onclick = deleteCallback;
-// }
 function showConfirm(text, callback) {
     const confirmBox = document.getElementById("confirmBox");
     const confirmText = document.getElementById("confirmText");
     const confirmBtn = document.getElementById("confirmBtn");
 
     confirmText.innerText = text;
-
     confirmBox.classList.remove("hidden");
 
     confirmBtn.onclick = () => {
-        closeConfirm()
-        callback()
+        closeConfirm();
+        callback();
     };
 }
 
-// Function to close the confirmation modal
 function closeConfirm() {
     const confirmBox = document.getElementById("confirmBox");
     confirmBox.classList.add("hidden");
-    confirmBox.classList.remove("flex");
-    
 }
 
 // The missing Delete function for Lost and Found

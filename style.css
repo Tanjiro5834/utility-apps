@@ -5,18 +5,26 @@
 }
 
 body {
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  min-height: 100vh;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+
+  background:
+    
+    linear-gradient(
+      rgba(37, 99, 235, 0.85),
+      rgba(37, 99, 235, 0.6)
+    ),
+
+   
+    url("bg.jpg");
+
+  background-size: cover;
+  background-position: center;
   background-attachment: fixed;
-  min-height: 100vh;  
-  font-family:
-    "Inter",
-    system-ui,
-    -apple-system,
-    sans-serif;
 }
 /* Apply Bebas Neue to all Headers and Nav elements */
 h1, h2, h3, .tab-btn, .btn-primary, th {
-    font-family: 'Bebas Neue', sans-serif !important;
+    font-family: "Times New Roman", Times, serif !important;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -56,6 +64,24 @@ button,
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   padding: 24px;
   margin-bottom: 24px;
+}
+
+.btn-prime{
+  background-color: #B59410;
+  font-size: 1.2rem !important;
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.btn-prime:hover {
+  background-color: white;
+  color: var(--brand-blue);
+  border-color: var(--brand-blue);
 }
 
 .btn-primary {
@@ -101,13 +127,13 @@ button,
   font-size: 1.2rem !important;
   padding: 12px 24px;
   font-weight: 600;
-  color: #64748b;
+  color: white;
   transition: color 0.3s;
   z-index: 1;
 }
 
 .tab-btn.active {
-  color: var(--brand-blue);
+  color: #FFD700;
 }
 
 /* The Moving Underline Indicator */
