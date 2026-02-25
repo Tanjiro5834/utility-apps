@@ -31,7 +31,7 @@ h1, h2, h3, .tab-btn, .btn-primary, th {
 
 /* Specific sizing for the Main Title */
 h1 {
-    font-size: 3rem !important;
+    font-size: 2.5rem !important;
     line-height: 1;
 }
 
@@ -206,3 +206,163 @@ button,
   display: block;
 }
 
+/* Sidebar Styling */
+.records-sidebar {
+    height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 20px 0;
+    border-right: 3px solid #FFD700;
+    z-index: 100;
+}
+
+.sidebar-header {
+    color: #FFD700;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+}
+
+.side-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 15px 20px;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.side-link:hover, .side-link.active {
+    background: #2563eb;
+    color: white;
+    padding-left: 30px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.filter-group {
+    transition: opacity 0.3s ease;
+}
+
+/* Fix the alignment of the main content area */
+.records-wrapper {
+    margin-left: 220px; /* Width of your sidebar */
+    padding: 40px;
+    width: calc(100% - 220px);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.records-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Ensure cards take full width of their container */
+.filter-group {
+    width: 100%;
+}
+
+.card {
+    margin-bottom: 0; /* Handled by container gap */
+    width: 100%;
+    overflow: hidden; /* Keeps table from breaking card edges */
+}
+
+/* Sidebar adjustments for better alignment */
+.records-sidebar {
+    width: 300px;
+    border-right: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Responsive fix for smaller screens */
+@media (max-width: 1024px) {
+    .records-wrapper {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+        padding: 20px;
+    }
+}
+
+/* Move content over to make room for sidebar */
+.records-main-content {
+    margin-left: 240px !important;
+}
+
+/* Mobile Responsive adjustment */
+@media (max-width: 768px) {
+    .records-sidebar { width: 60px; }
+    .side-link { font-size: 0; padding: 15px 10px; text-align: center; }
+    .side-link::before { content: '📁'; font-size: 1.2rem; }
+    .records-main-content { margin-left: 80px !important; }
+    .sidebar-header { display: none; }
+}
+
+/* 1. Define the Fade-In Animation */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 2. Apply the animation to the cards when they become visible */
+.filter-group:not(.hidden) {
+    display: block;
+    animation: fadeInSlide 0.4s ease-out forwards;
+}
+
+/* 3. Ensure hidden items stay hidden and don't animate */
+.hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+.search-input {
+    padding: 8px 15px;
+    border: 2px solid #000000;
+    width: 400px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #2563eb;
+}
+
+/* Adjust the header inside the card to look good on mobile */
+@media (max-width: 640px) {
+    .card .flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .search-input {
+        width: 100%;
+    }
+}

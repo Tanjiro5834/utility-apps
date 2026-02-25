@@ -288,7 +288,7 @@ function renderRecords() {
     <td class="p-4 text-gray-600">${new Date(r.dateTime).toLocaleString()}</td>
     <td class="p-4 text-gray-600 font-mono text-xs">${r.classTime}</td>
     <td class="p-4 text-gray-600 font-mono text-xs">${r.arrivalTime || '—'}</td>
-    <td class="p-4 text-gray-600">G${r.grade} - ${r.section}</td>
+    <td class="p-4 text-gray-600">Grade${r.grade} - ${r.section}</td>
     <td class="p-4 text-gray-500 italic text-xs max-w-xs truncate">${r.reason}</td> <td class="p-4">${isAbsence}</td>
     <td class="p-4 text-center whitespace-nowrap">
         <button onclick="window.location.href='index.html?editTardy=${r.id}'" class="btn-edit mr-2">EDIT</button>
@@ -597,3 +597,60 @@ ipcRenderer.on('loaded-data', (event, data) => {
 ipcRenderer.on('save-status', (event, message) => {
     console.log(message);
 });
+
+// Function to filter record sections
+function filterRecords(category) {
+    const groups = document.querySelectorAll('.filter-group');
+    const buttons = document.querySelectorAll('.side-link');
+
+    // 1. Update Button States
+    buttons.forEach(btn => {
+        btn.classList.remove('active', 'bg-blue-600');
+    });
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active', 'bg-blue-600');
+    }
+
+    // 2. Filter with Transition Logic
+    groups.forEach(group => {
+        // We use a small timeout to "reset" the animation if switching fast
+        group.classList.add('hidden'); 
+        
+        setTimeout(() => {
+            if (category === 'all') {
+                group.classList.remove('hidden');
+            } else {
+                if (group.id === `filter-${category}`) {
+                    group.classList.remove('hidden');
+                }
+            }
+        }, 10); // Tiny delay to trigger the CSS animation
+    });
+}
+
+/**
+ * Generic search function for tables
+ * @param {string} inputId - ID of the search input field
+ * @param {string} tableBodyId - ID of the tbody to filter
+ */
+function searchTable(inputId, tableBodyId) {
+    const input = document.getElementById(inputId);
+    const filter = input.value.toLowerCase();
+    const tbody = document.getElementById(tableBodyId);
+    const rows = tbody.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        // We check the first cell (index 0) which is usually the name
+        // For Lost & Found, you might want to check the first or second cell
+        const nameCell = rows[i].getElementsByTagName("td")[0];
+        
+        if (nameCell) {
+            const txtValue = nameCell.textContent || nameCell.innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                rows[i].style.display = ""; // Show row
+            } else {
+                rows[i].style.display = "none"; // Hide row
+            }
+        }
+    }
+}

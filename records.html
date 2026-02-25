@@ -9,97 +9,122 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4 md:p-8">
-    <div class="max-w-6xl mx-auto">
-        <header class="mb-10 text-center">
-            <h1 class="text-2xl md:text-4xl font-black text-white tracking-tight uppercase">
-                Records Registry
-            </h1>
-            <div class="h-1 w-24 bg-blue-600 mx-auto mt-2 mb-4"></div>
-            <a href="index.html" class="btn-prime inline-block">
-                ← Back to Admin Portal
-            </a>
-        </header>
 
-        <div class="grid grid-cols-1 gap-8">
-            
-            <!-- Tardy Registry -->
+<div class="records-sidebar">
+    <div class="sidebar-header">Records</div>
+    <button onclick="filterRecords('all')" class="side-link active">Show All</button>
+    <button onclick="filterRecords('tardy')" class="side-link">Tardy Records</button>
+    <button onclick="filterRecords('gatepass')" class="side-link">Gate Passes</button>
+    <button onclick="filterRecords('lostfound')" class="side-link">Lost & Found</button>
+</div>
+
+   <div class="records-wrapper"> <header class="mb-10 text-center">
+        <h1 class="text-2xl md:text-4xl font-black text-white tracking-tight uppercase">
+            Records Registry
+        </h1>
+        <div class="h-1 w-24 bg-blue-600 mx-auto mt-2 mb-4"></div>
+        <a href="index.html" class="btn-prime inline-block">
+            ← Back to Admin Portal
+        </a>
+    </header>
+
+    <div class="records-container">
+        <div id="filter-tardy" class="filter-group">
             <div class="card">
                 <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Tardy Registry</h2>
+                <input type="text" 
+                   id="searchTardy" 
+                   onkeyup="searchTable('searchTardy', 'tardyTableBody')" 
+                   placeholder="Search Student Name..." 
+                   class="search-input">
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead>
                             <tr class="bg-gray-100 border-b-2 border-gray-200">
-                                <th class="p-4 uppercase text-xs font-bold">Student Name</th>
-        <th class="p-4 uppercase text-xs font-bold">Date & Time</th>
-        <th class="p-4 uppercase text-xs font-bold">Class Start Time</th>
-        <th class="p-4 uppercase text-xs font-bold">Time of Arrival</th>
-        <th class="p-4 uppercase text-xs font-bold">Grade & Section</th>    
-        <th class="p-4 uppercase text-xs font-bold">Reason for Tardiness</th> <th class="p-4 uppercase text-xs font-bold">Status</th>
-        <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
+                                <th class="p-4">Student Name</th>
+                                <th class="p-4">Date & Time</th>
+                                <th class="p-4">Class Time</th>
+                                <th class="p-4">Arrival</th>
+                                <th class="p-4">Grade & Section</th>    
+                                <th class="p-4">Reason</th> 
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="tardyTableBody"></tbody>
                     </table>
                 </div>
             </div>
+        </div>
 
-            <!-- Gate Pass History -->
+        <div id="filter-gatepass" class="filter-group">
             <div class="card">
                 <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Gate Pass History</h2>
+
+                <input type="text" 
+                   id="searchGatepass" 
+                   onkeyup="searchTable('searchGatepass', 'gpTableBody')" 
+                   placeholder="Search Student Name..." 
+                   class="search-input">
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead>
                             <tr class="bg-gray-100 border-b-2 border-gray-200">
-                                <th class="p-4 uppercase text-xs font-bold">Student</th>
-                                <th class="p-4 uppercase text-xs font-bold">Grade & Section</th>
-                                <th class="p-4 uppercase text-xs font-bold">Pick up by:</th>
-                                <th class="p-4 uppercase text-xs font-bold">Contact Number</th>
-                                <th class="p-4 uppercase text-xs font-bold">Date</th>
-                                <th class="p-4 uppercase text-xs font-bold">Exit Time</th>
-                                <th class="p-4 uppercase text-xs font-bold">Relationship</th>
-                                <th class="p-4 uppercase text-xs font-bold">Reason</th>
-                                <th class="p-4 uppercase text-xs font-bold text-center">Actions</th>
+                                <th class="p-4">Student</th>
+                                <th class="p-4">Grade & Section</th>
+                                <th class="p-4">Pick up by</th>
+                                <th class="p-4">Contact</th>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Exit Time</th>
+                                <th class="p-4">Relationship</th>
+                                <th class="p-4">Reason</th>
+                                <th class="p-4 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="gpTableBody"></tbody>
                     </table>
                 </div>
             </div>
+        </div>
 
+        <div id="filter-lostfound" class="filter-group">
+            <div class="card">
+                <h2 class="text-lg font-black uppercase mb-6 text-gray-800">Lost and Found Records</h2>
+
+                <input type="text" 
+                   id="searchLF" 
+                   onkeyup="searchTable('searchLF', 'lfTableBody')" 
+                   placeholder="Search Reporter/Item..." 
+                   class="search-input">
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b-2">
+                                <th class="p-4">Reporter</th>
+                                <th class="p-4">Grade & Section</th>
+                                <th class="p-4">Date Reported</th>
+                                <th class="p-4">Type</th>
+                                <th class="p-4">Item</th>
+                                <th class="p-4">Last Seen/Found Location</th>
+                                <th class="p-4">Color/Brand/Identifying Marks</th>
+                                <th class="p-4">Date Time</th>
+                                <th class="p-4">Received By</th>
+                                <th class="p-4">Date Received</th>
+                                <th class="p-4">Claimant Name</th>
+                                <th class="p-4">Relationship</th>
+                                <th class="p-4">Date Claimed</th>
+                                <th class="p-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lfTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="card">
-<h2 class="text-lg font-black uppercase mb-6 text-gray-800">
-LOST AND FOUND RECORDS
-</h2>
-
-<div class="overflow-x-auto">
-<table class="w-full text-left text-sm border-collapse">
-
-<thead>
-<tr class="bg-gray-100 border-b-2">
-<th class="p-4">Reporter</th>
-<th class="p-4">Grade & Section</th>
-<th class="p-4">Date Reported</th>
-<th class="p-4">Type</th>
-<th class="p-4">Item</th>
-<th class="p-4">Location</th>
-<th class="p-4">Color/Brand/Identifying Marks</th>
-<th class="p-4">Date Time</th>
-<th class="p-4">Received By</th>
-<th class="p-4">Date Received</th>
-<th class="p-4">Claimnant Name</th>
-<th class="p-4">Relationship</th>
-<th class="p-4">Date Claimed</th>
-<th class="p-4 text-center">Actions</th>
-</tr>
-</thead>
-
-<tbody id="lfTableBody"></tbody>
-
-</table>
-</div>
 </div>
 
     <div id="confirmBox" class="fixed inset-0 bg-slate-900/60 hidden flex items-center justify-center z-50">
