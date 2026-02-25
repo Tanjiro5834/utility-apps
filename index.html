@@ -38,63 +38,7 @@
         </div>
       </header>
 
-        <div id="section-tardy" class="tab-content section-fade">
-            <div class="card">
-                <h2 id="tardyFormTitle" class="text-xl font-bold mb-6 text-blue-700 border-l-4 border-blue-700 pl-3">Issue Tardy Slip</h2>
-                <form id="tardyForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="hidden" id="editTardyId">
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Student Name</label>
-                        <input type="text" id="tardyStudent" required class="input-field" placeholder="Full Name">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Date & Time</label>
-                        <input type="datetime-local" id="tardyDateTime" required class="input-field">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Class Start Time</label>
-                        <input type="time" id="classTime" required class="input-field">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Time of Arrival</label>
-                        <input type="time" id="arrivalTime" required class="input-field">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Grade Level</label>
-                        <select id="tardyGrade" required class="input-field">
-                            <option value="">Select Section</option>
-                            <option value=" Pre-Kinder 1">Pre-Kinder 1</option>
-                            <option value=" Pre-Kinder 2">Pre-Kinder 2</option>
-                            <option value=" Kindergarten">Kindergarten</option>
-                            <option value=" 1">Grade 1</option>
-                            <option value=" 2">Grade 2</option>
-                            <option value=" 3">Grade 3</option>
-                            <option value=" 4">Grade 4</option>
-                            <option value=" 5">Grade 5</option>
-                            <option value=" 6">Grade 6</option>
-                            <option value=" 7">Grade 7</option>
-                            <option value=" 8">Grade 8</option>
-                            <option value=" 9">Grade 9</option>
-                            <option value=" 10">Grade 10</option>
-                            <option value=" 11">Grade 11</option>
-                            <option value=" 12">Grade 12</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase text-gray-500">Section</label>
-                        <input type="text" id="tardySection" required class="input-field" placeholder="e.g. Diamond">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold uppercase text-gray-500">Reason for Tardiness</label>
-                        <textarea id="tardyReason" required class="input-field" rows="3"></textarea>
-                    </div>
-                    <div class="md:col-span-2 flex justify-end gap-4 mt-2">
-                        <button type="button" id="cancelTardyEdit" class="hidden px-6 py-2 text-gray-500 font-bold uppercase text-sm border-2 border-transparent hover:border-gray-300" onclick="resetTardyForm()">Cancel</button>
-                        <button type="submit" id="tardySubmitBtn" class="btn-primary">Generate Slip</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
 
       <div class="tabs-container mb-8">
         <button
